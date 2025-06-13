@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { User } from './typeorm/entities/User';
+import { AuthModule } from './auth/auth.module';
 
 const port = Number(process.env.DATABASE_PORT || 5432);
 
@@ -18,7 +19,7 @@ const port = Number(process.env.DATABASE_PORT || 5432);
     entities: [User],
     synchronize: true,
 
-  })],
+  }), AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

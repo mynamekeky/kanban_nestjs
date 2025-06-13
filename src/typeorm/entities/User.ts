@@ -8,10 +8,16 @@ export class User {
     id: number;
 
     @Column()
-    username: string;
+    name: string;
+
+    @Column()
+    email: string;
 
     @Column()
     password: string;
+
+    @Column({ default: 'user'})
+    role: string;
 
     @Column({ default: new Date() })
     createdAt: Date;
