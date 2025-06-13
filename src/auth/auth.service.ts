@@ -1,19 +1,25 @@
 import { Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from 'src/repositories/user.repository';
-import { ResponseLoginDto, ResponseMessageDto, ResponseUserDto } from './dto/response.dto';
+import { ResponseLoginDto, ResponseUserDto } from './dto/response.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ResponseMessageDto } from 'src/base/base.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/typeorm/entities/User';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService,
-  ) { }
+  ) {
+  }
 
   async login(email: string, password: string): Promise<ResponseLoginDto> {
-    const user = await this.userRepository.findOneByEmail(email)
+    const user = await this.userRepository.findOne({
+      where: { email }
+    });
 
     if (!user) {
       throw new NotFoundException()
@@ -46,16 +52,22 @@ export class AuthService {
         10,
       )
     }
+    try {
+      const userData = await this.userRepository.create(data)
+      await this.userRepository.save(userData);
+      return {
+        message: 'Create User Success',
+      };
+    } catch (err) {
+      return {
+        message: 'error',
+      };
+    }
 
-    await this.userRepository.create(data)
-
-    return {
-      message: 'Create User Success',
-    };
   }
 
   async getProfile(userId: number): Promise<ResponseUserDto> {
-    const user = await this.userRepository.findOne(userId)
+    const user = await this.userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new InternalServerErrorException()

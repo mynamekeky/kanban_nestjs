@@ -20,12 +20,3 @@ export class ResponseLoginDto {
     @ApiProperty({ example: 'this token' })
     accessToken: string;
 }
-
-export class SwaggerError {
-    @ApiProperty({ example: 'message' })
-    message: string;
-}
-
-export class ResponseMessageDto {
-    message: string;
-}

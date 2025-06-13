@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { ResponseLoginDto, ResponseMessageDto, ResponseUserDto, SwaggerError } from './dto/response.dto';
+import { ResponseLoginDto, ResponseUserDto } from './dto/response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { ResponseMessageDto, SwaggerError } from 'src/base/base.dto';
 
 @Controller('auth')
 export class AuthController {
